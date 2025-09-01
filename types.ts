@@ -1,4 +1,3 @@
-
 export interface Question {
   QuestionNo: number;
   Question: string;
@@ -22,5 +21,7 @@ export enum View {
   Loading = 'loading',
   Exam = 'exam',
   Results = 'results',
-  History = 'history'
+  History = 'history',
+  AdminLogin = 'admin_login',
+  AdminDashboard = 'admin_dashboard',
 }

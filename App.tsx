@@ -1,8 +1,7 @@
-
 import React, { useState, useEffect, useCallback } from 'react';
 import type { Question, ExamResult } from './types';
 import { View } from './types';
-import { getQuestions } from './services/questionService';
+import { getQuestions, getQuestionCount } from './services/questionService';
 import { useLocalStorage } from './hooks/useLocalStorage';
 import Header from './components/Header';
 import HomeScreen from './components/HomeScreen';
@@ -10,6 +9,8 @@ import LoadingScreen from './components/LoadingScreen';
 import ExamScreen from './components/ExamScreen';
 import ResultsScreen from './components/ResultsScreen';
 import HistoryScreen from './components/HistoryScreen';
+import AdminLoginScreen from './components/AdminLoginScreen';
+import AdminDashboardScreen from './components/AdminDashboardScreen';
 
 const EXAM_QUESTION_COUNT = 100;
 
@@ -19,6 +20,8 @@ const App: React.FC = () => {
   const [userAnswers, setUserAnswers] = useState<Map<number, number>>(new Map());
   const [examHistory, setExamHistory] = useLocalStorage<ExamResult[]>('examHistory', []);
   const [currentResult, setCurrentResult] = useState<ExamResult | null>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [loginError, setLoginError] = useState<string | null>(null);
 
   const prepareExam = useCallback(async () => {
     const questions = await getQuestions(EXAM_QUESTION_COUNT);
@@ -69,7 +72,30 @@ const App: React.FC = () => {
   };
 
   const handleSwitchView = (newView: View) => {
-    setView(newView);
+    if (newView === View.AdminLogin && isAdmin) {
+      setView(View.AdminDashboard);
+    } else {
+      setView(newView);
+    }
+  }
+
+  const handleLogin = (password: string) => {
+    if (password === 'admin123') {
+      setIsAdmin(true);
+      setLoginError(null);
+      setView(View.AdminDashboard);
+    } else {
+      setLoginError('Invalid username or password.');
+    }
+  }
+
+  const handleLogout = () => {
+    setIsAdmin(false);
+    setView(View.Home);
+  }
+
+  const handleUploadQuestions = (questions: Question[]) => {
+    localStorage.setItem('customQuestions', JSON.stringify(questions));
   }
 
   const renderContent = () => {
@@ -97,6 +123,14 @@ const App: React.FC = () => {
         );
       case View.History:
         return <HistoryScreen history={examHistory} />;
+      case View.AdminLogin:
+        return isAdmin ? 
+          <AdminDashboardScreen onLogout={handleLogout} onUpload={handleUploadQuestions} initialQuestionCount={getQuestionCount()} /> : 
+          <AdminLoginScreen onLogin={handleLogin} error={loginError} />;
+      case View.AdminDashboard:
+        return isAdmin ? 
+          <AdminDashboardScreen onLogout={handleLogout} onUpload={handleUploadQuestions} initialQuestionCount={getQuestionCount()} /> : 
+          <AdminLoginScreen onLogin={handleLogin} error={loginError} />;
       default:
         return <HomeScreen onCreateExam={handleCreateExam} />;
     }

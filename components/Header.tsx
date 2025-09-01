@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { View } from '../types';
 
@@ -30,6 +29,7 @@ const Header: React.FC<HeaderProps> = ({ currentView, onSwitchView }) => {
       <nav className="flex space-x-2 bg-slate-700/50 p-1 rounded-lg">
         <TabButton view={currentView} targetView={[View.Home, View.Exam, View.Loading, View.Results]} text="Exam" />
         <TabButton view={currentView} targetView={View.History} text="History" />
+        <TabButton view={currentView} targetView={[View.AdminLogin, View.AdminDashboard]} text="Admin" />
       </nav>
     </header>
   );
