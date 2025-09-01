@@ -1,0 +1,5 @@
+{
+  "name": "QuickQuiz - Online Exam Platform",
+  "description": "A mobile-friendly online exam application that generates random quizzes from a question bank, tracks scores, and saves exam history.",
+  "requestFramePermissions": []
+}
