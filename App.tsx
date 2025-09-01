@@ -94,10 +94,6 @@ const App: React.FC = () => {
     setView(View.Home);
   }
 
-  const handleUploadQuestions = (questions: Question[]) => {
-    localStorage.setItem('customQuestions', JSON.stringify(questions));
-  }
-
   const renderContent = () => {
     switch (view) {
       case View.Home:
@@ -125,11 +121,11 @@ const App: React.FC = () => {
         return <HistoryScreen history={examHistory} />;
       case View.AdminLogin:
         return isAdmin ? 
-          <AdminDashboardScreen onLogout={handleLogout} onUpload={handleUploadQuestions} initialQuestionCount={getQuestionCount()} /> : 
+          <AdminDashboardScreen onLogout={handleLogout} initialQuestionCount={getQuestionCount()} /> : 
           <AdminLoginScreen onLogin={handleLogin} error={loginError} />;
       case View.AdminDashboard:
         return isAdmin ? 
-          <AdminDashboardScreen onLogout={handleLogout} onUpload={handleUploadQuestions} initialQuestionCount={getQuestionCount()} /> : 
+          <AdminDashboardScreen onLogout={handleLogout} initialQuestionCount={getQuestionCount()} /> : 
           <AdminLoginScreen onLogin={handleLogin} error={loginError} />;
       default:
         return <HomeScreen onCreateExam={handleCreateExam} />;

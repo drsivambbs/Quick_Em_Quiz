@@ -27,8 +27,16 @@ const getCustomQuestions = (): Question[] | null => {
     }
 };
 
-const getQuestionBank = (): Question[] => {
+export const getQuestionBank = (): Question[] => {
     return getCustomQuestions() || defaultQuestions;
+};
+
+export const saveQuestionBank = (questions: Question[]): void => {
+    try {
+        localStorage.setItem('customQuestions', JSON.stringify(questions));
+    } catch (error) {
+        console.error("Failed to save custom questions to localStorage", error);
+    }
 };
 
 

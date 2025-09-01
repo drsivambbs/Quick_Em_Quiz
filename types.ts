@@ -25,3 +25,10 @@ export enum View {
   AdminLogin = 'admin_login',
   AdminDashboard = 'admin_dashboard',
 }
+
+export interface GroundingChunk {
+  web: {
+    uri: string;
+    title: string;
+  };
+}
